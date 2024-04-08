@@ -15,6 +15,14 @@ composer install
 ```shell
 npm install
 ```
+- run migration
+```shell
+php artisan migrate
+```
+- run database seed
+```shell
+php artisan db:seed
+```
 - build node app (react js for this case) because im using react js
 ```shell
 npm run build
@@ -23,3 +31,11 @@ npm run build
 - copy **.env.example** to **.env** file
 - Make sure **https** is enabled on laragon apache2 services
 - Open https://sewa-mobil.test
+
+## Admin Access
+- email : **admin@example.com**
+- password : **admin123**
+
+## User Access
+- email : **angganix@gmail.com**
+- password : **user123**
