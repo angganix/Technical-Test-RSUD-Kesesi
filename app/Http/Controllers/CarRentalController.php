@@ -25,7 +25,6 @@ class CarRentalController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
