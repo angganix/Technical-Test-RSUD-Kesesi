@@ -2,10 +2,13 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SelectInput from '@/Components/SelectInput';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { formattedNumber } from '@/utils/helper';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { IoArrowForward, IoCheckbox, IoClose } from "react-icons/io5";
+import { IoArrowForward } from "react-icons/io5";
+import { HiOutlineEmojiSad } from "react-icons/hi";
+import { BiReset } from "react-icons/bi";
+import SecondaryButton from '@/Components/SecondaryButton';
+import CardItem from '@/Components/CardItem';
 
 export default function CarList({ auth, cars, search, merk, model, availability, master_data }) {
     const [searchFilter, setSearchFilter] = useState(search);
@@ -22,13 +25,27 @@ export default function CarList({ auth, cars, search, merk, model, availability,
         })
     }
 
+    const resetFilter = () => {
+        router.get('car');
+    }
+
+    const deleteItem = (item) => {
+        if (window.confirm(`Yakin akan menghapus ${item?.name}?`)) {
+            router.delete(`/car/${item?.id}`);
+        }
+    }
+
+    const editItem = (item) => {
+        router.get(`/car/edit/${item?.id}`);
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={(
                 <div className="flex justify-between items-center">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">Daftar Mobil</h2>
-                    <PrimaryButton>
+                    <PrimaryButton onClick={() => router.get("car/add-new")}>
                         Tambah Baru
                     </PrimaryButton>
                 </div>
@@ -40,7 +57,7 @@ export default function CarList({ auth, cars, search, merk, model, availability,
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-3 mb-3">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                            <div className="col-span-12 md:col-span-3">
+                            <div className="col-span-12 md:col-span-2">
                                 <SelectInput
                                     placeholder="- Semua Merk -"
                                     className="w-full"
@@ -52,7 +69,7 @@ export default function CarList({ auth, cars, search, merk, model, availability,
                                     }))}
                                 />
                             </div>
-                            <div className="col-span-12 md:col-span-3">
+                            <div className="col-span-12 md:col-span-2">
                                 <SelectInput
                                     placeholder="- Semua Model -"
                                     className="w-full"
@@ -64,15 +81,33 @@ export default function CarList({ auth, cars, search, merk, model, availability,
                                     }))}
                                 />
                             </div>
-                            <div className="col-span-12 md:col-span-4">
-                                <TextInput
-                                    placeholder="Cari Nama atau No. Plat..."
-                                    type="search"
+                            <div className="col-span-12 md:col-span-2">
+                                <SelectInput
+                                    placeholder="- Semua Status -"
                                     className="w-full"
+                                    value={availabilityFilter}
+                                    onChange={(event) => setAvailabilityFilter(event.target.value)}
+                                    options={[
+                                        { value: 0, label: "Tidak Tersedia" },
+                                        { value: 1, label: "Tersedia" }
+                                    ]}
                                 />
                             </div>
-                            <div className="col-span-12 md:col-span-2">
-                                <div className="flex items-center h-full">
+                            <div className="col-span-12 md:col-span-3">
+                                <TextInput
+                                    placeholder="Cari Nama / No. Plat..."
+                                    type="search"
+                                    className="w-full"
+                                    value={searchFilter}
+                                    onChange={(event) => setSearchFilter(event.target.value)}
+                                />
+                            </div>
+                            <div className="col-span-12 md:col-span-3">
+                                <div className="flex items-center h-full gap-3">
+                                    <SecondaryButton className="w-full justify-center flex py-3 items-center gap-x-1" onClick={resetFilter}>
+                                        <span>Reset</span>
+                                        <BiReset size={17} />
+                                    </SecondaryButton>
                                     <PrimaryButton className="w-full justify-center flex py-3 items-center gap-x-1" onClick={applyFilter}>
                                         <span>Cari Data</span>
                                         <IoArrowForward size={17} />
@@ -82,34 +117,16 @@ export default function CarList({ auth, cars, search, merk, model, availability,
                         </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                        {cars?.data?.map(item => (
-                            <div key={item?.id} className="col-span-12 md:col-span-3 p-4 border border-slate-100 bg-white rounded-none sm:rounded-lg shadow-sm cursor-pointer">
-                                <div className="flex justify-between items-center mb-2">
-                                    <h4 className="font-semibold flex-grow">{item?.name}</h4>
-                                    {item?.availability ? <IoCheckbox className="text-green-500 text-xl" /> : <IoClose className="text-orange-500 text-xl" />}
-                                </div>
-                                <div className="flex justify-between items-center mb-3">
-                                    <div className="flex flex-col">
-                                        <small className="text-slate-400">Merk</small>
-                                        <h5 className="text-sm text-slate-600 font-semibold">{item?.merk}</h5>
-                                    </div>
-                                    <div className="flex flex-col items-end">
-                                        <small className="text-slate-400">Model</small>
-                                        <h5 className="text-sm text-slate-600 font-semibold">{item?.model}</h5>
-                                    </div>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <div className="flex flex-col">
-                                        <small className="text-slate-400">Plat Nomor</small>
-                                        <h5 className="text-sm text-slate-600 font-semibold">{item?.plat_number}</h5>
-                                    </div>
-                                    <div className="flex flex-col items-end">
-                                        <small className="text-slate-400">Sewa /hari</small>
-                                        <h5 className="text-sm text-slate-600 font-semibold">{formattedNumber(item?.daily_cost)}</h5>
-                                    </div>
-                                </div>
+                        {!cars?.total ? (
+                            <div className="p-6 bg-white shadow-sm flex col-span-12 gap-3 rounded-lg justify-center items-center flex-col w-full border border-slate-200">
+                                <HiOutlineEmojiSad size={64} />
+                                <h4 className="text-xl">Data Tidak Ditemukan</h4>
                             </div>
-                        ))}
+                        ) : (
+                            cars?.data?.map(item => (
+                                <CardItem key={item?.id} item={item} deleteItem={deleteItem} editItem={editItem} />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

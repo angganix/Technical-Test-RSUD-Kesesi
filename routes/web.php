@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarRentalController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -18,12 +19,15 @@ Route::get('/', function () {
 
 Route::group(["middleware" => ["auth","verified"]], function () {
     Route::group(["prefix" => "dashboard"], function () {
-        Route::get("/", function () {
-            return Inertia::render('Dashboard');
-        })->name("dashboard");
+        Route::get("/", [DashboardController::class, "index"])->name("dashboard");
     });
     Route::group(["prefix" => "car"], function () {
         Route::get("/", [CarController::class, "index"])->name("car");
+        Route::get("/add-new", [CarController::class, "create"])->name("car.add-new");
+        Route::get("/edit/{car}", [CarController::class, "edit"])->name("car.edit");
+        Route::post("/", [CarController::class, "store"])->name("car.insert");
+        Route::post("/update/{car}", [CarController::class, "update"])->name("car.update");
+        Route::delete("/{car}", [CarController::class, "destroy"])->name("car.delete");
     });
     Route::group(["prefix" => "rent"], function () {
         Route::get("/", [CarRentalController::class, "index"])->name("rent");
