@@ -8,6 +8,7 @@ git clone https://github.com/angganix/Technical-Test-RSUD-Kesesi.git sewa-mobil
 ```shell
 cd sewa-mobil
 ```
+- copy **.env.example** to **.env** file
 - install php dependencies and nodejs dependencies
 ```shell
 composer install
@@ -28,7 +29,6 @@ php artisan db:seed
 npm run build
 ```
 - Im using **laragon**, so make sure to start all laragon services (apache2, mysql)
-- copy **.env.example** to **.env** file
 - Make sure **https** is enabled on laragon apache2 services
 - Open https://sewa-mobil.test
 
