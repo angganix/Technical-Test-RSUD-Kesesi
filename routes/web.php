@@ -30,7 +30,10 @@ Route::group(["middleware" => ["auth","verified"]], function () {
         Route::delete("/{car}", [CarController::class, "destroy"])->name("car.delete");
     });
     Route::group(["prefix" => "rent"], function () {
+        Route::get("/{car}", [CarRentalController::class, "create"])->name("rent.create");
         Route::get("/", [CarRentalController::class, "index"])->name("rent");
+        Route::post("/", [CarRentalController::class, "store"])->name("rent.store");
+        Route::patch("/{carRental}", [CarRentalController::class, "returnCar"])->name("rent.return");
     });
     Route::group(["prefix" => "profile"], function () {
         Route::get("/", [ProfileController::class, "edit"])->name("profile.edit");

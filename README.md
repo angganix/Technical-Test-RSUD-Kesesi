@@ -9,6 +9,10 @@ git clone https://github.com/angganix/Technical-Test-RSUD-Kesesi.git sewa-mobil
 cd sewa-mobil
 ```
 - copy **.env.example** to **.env** file
+- do storage linking
+```shell
+php artisan storage:link
+```
 - install php dependencies and nodejs dependencies
 ```shell
 composer install

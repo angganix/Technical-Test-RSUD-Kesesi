@@ -2,8 +2,10 @@ import React from 'react'
 import SecondaryButton from './SecondaryButton'
 import { IoPencil, IoTrashBin } from 'react-icons/io5'
 import { formattedNumber } from '@/utils/helper'
+import { MdOutlineCarRental } from "react-icons/md";
+import { RiFileCloseLine } from "react-icons/ri";
 
-const CardItem = ({ item, deleteItem = null, editItem = null }) => {
+const CardItem = ({ item, deleteItem = null, editItem = null, rentItem = null, user = null }) => {
     return (
         <div className="col-span-12 md:col-span-3 border border-slate-100 bg-white rounded-none sm:rounded-lg shadow-sm">
             <div className="p-2">
@@ -34,7 +36,7 @@ const CardItem = ({ item, deleteItem = null, editItem = null }) => {
                         <h5 className="text-sm text-slate-600 font-semibold">{formattedNumber(item?.daily_cost)}</h5>
                     </div>
                 </div>
-                {deleteItem && editItem && (
+                {deleteItem && editItem && item?.availability && user?.access === "admin" ? (
                     <div className="flex justify-between items-center">
                         <SecondaryButton type="button" className="flex items-center justify-center gap-x-1 text-red-500 border-red-500" onClick={() => deleteItem(item)}>
                             <IoTrashBin />
@@ -45,7 +47,18 @@ const CardItem = ({ item, deleteItem = null, editItem = null }) => {
                             <span>Edit</span>
                         </SecondaryButton>
                     </div>
-                )}
+                ) : null}
+                {!item?.availability ? (
+                    <SecondaryButton type="button" className="w-full text-slate-500 border-slate-500 flex justify-center items-center gap-x-1">
+                        <RiFileCloseLine size={18} />
+                        <span>Sedang Digunakan</span>
+                    </SecondaryButton>
+                ) : rentItem ? (
+                    <SecondaryButton type="button" className="w-full text-green-600 border-green-600 flex justify-center items-center gap-x-1" onClick={() => rentItem(item)}>
+                        <MdOutlineCarRental size={18} />
+                        <span>Sewa Mobil Ini</span>
+                    </SecondaryButton>
+                ) : null}
             </div>
         </div>
     )

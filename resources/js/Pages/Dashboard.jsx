@@ -29,6 +29,10 @@ export default function Dashboard({ auth, cars, search, merk, model, availabilit
         router.get('dashboard');
     }
 
+    const rentItem = (item) => {
+        router.get(`/rent/${item?.id}`);
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -107,7 +111,7 @@ export default function Dashboard({ auth, cars, search, merk, model, availabilit
                             </div>
                         ) : (
                             cars?.data?.map(item => (
-                                <CardItem key={item?.id} item={item} />
+                                <CardItem key={item?.id} item={item} rentItem={rentItem} user={auth?.user} />
                             ))
                         )}
                     </div>

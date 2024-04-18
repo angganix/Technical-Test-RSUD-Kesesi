@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dateTime("start_rent");
             $table->dateTime("end_rent");
             $table->bigInteger("car_id");
+            $table->dateTime("return_time")->nullable();
             $table->bigInteger("user_id");
             $table->timestamps();
         });

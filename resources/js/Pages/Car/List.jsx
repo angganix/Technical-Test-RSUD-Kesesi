@@ -45,9 +45,11 @@ export default function CarList({ auth, cars, search, merk, model, availability,
             header={(
                 <div className="flex justify-between items-center">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">Daftar Mobil</h2>
-                    <PrimaryButton onClick={() => router.get("car/add-new")}>
-                        Tambah Baru
-                    </PrimaryButton>
+                    {auth?.user?.access === "admin" ? (
+                        <PrimaryButton onClick={() => router.get("car/add-new")}>
+                            Tambah Baru
+                        </PrimaryButton>
+                    ) : null}
                 </div>
             )}
         >
@@ -124,7 +126,7 @@ export default function CarList({ auth, cars, search, merk, model, availability,
                             </div>
                         ) : (
                             cars?.data?.map(item => (
-                                <CardItem key={item?.id} item={item} deleteItem={deleteItem} editItem={editItem} />
+                                <CardItem key={item?.id} item={item} deleteItem={deleteItem} editItem={editItem} user={auth?.user} />
                             ))
                         )}
                     </div>

@@ -10,11 +10,11 @@ class CarRental extends Model
     use HasFactory;
 
     protected $table = "car_rentals";
-    protected $guarded = [];
+    protected $fillable = ["start_rent", "end_rent", "car_id", "return_time", "user_id"];
 
     public function car()
     {
-        return $this->belongsTo(Car::class, "car_id", "id");
+        return $this->belongsTo(Car::class);
     }
 
     public function customer()

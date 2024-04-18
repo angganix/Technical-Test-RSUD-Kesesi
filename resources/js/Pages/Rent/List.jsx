@@ -1,7 +1,15 @@
+import RentItem from '@/Components/RentItem';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 export default function RentList({ auth, data }) {
+
+    const returnCar = (item) => {
+        if (window.confirm(`Kembalikan mobil ${item?.car?.name} ?`)) {
+            router.patch(`/rent/${item?.id}`);
+        }
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -11,8 +19,12 @@ export default function RentList({ auth, data }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">Daftar Sewa Mobil</div>
+                    <div className="bg-transparent overflow-hidden">
+                        <ul className="flex flex-col gap-y-2">
+                            {data?.map(item => (
+                                <RentItem item={item} key={item?.id} returnCar={returnCar} />
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
